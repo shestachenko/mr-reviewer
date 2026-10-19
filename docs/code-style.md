@@ -8,4 +8,6 @@ Do not add code the change does not need. When a readable version and a faster v
 
 A name says what the thing is. A comment exists only when the code cannot say it.
 
-ESLint is the check. `npm run lint` must pass. The principles above are not lint rules. The person who writes the change keeps them.
+ESLint is the check. `npm run lint` must pass. An `eslint-disable` comment does not count. Do not use `any` or a type assertion. Sort imports. A binding that starts with `_` is the only unused one that may stay.
+
+The principles above are not lint rules. The person who writes the change keeps them.

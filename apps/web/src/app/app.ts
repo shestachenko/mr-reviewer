@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Component, inject, signal} from '@angular/core';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +30,7 @@ export class App {
   private async load(): Promise<void> {
     try {
       const body = await firstValueFrom(
-        this.http.get<{ ok: boolean }>('/health'),
+        this.http.get<{ok: boolean}>('/health'),
       );
       this.status.set(body.ok ? 'API отвечает.' : 'API ответил без ok.');
     } catch {

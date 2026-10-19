@@ -1,10 +1,14 @@
 // @ts-check
 const eslint = require('@eslint/js');
-const { defineConfig } = require('eslint/config');
+const {defineConfig} = require('eslint/config');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
+const {plugins, rules, linterOptions} = require('../../eslint.shared.cjs');
 
 module.exports = defineConfig([
+  {
+    ignores: ['dist/**', 'node_modules/**'],
+  },
   {
     files: ['**/*.ts'],
     extends: [
@@ -14,7 +18,12 @@ module.exports = defineConfig([
       angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    plugins,
+    linterOptions,
     rules: {
+      ...rules,
+      // Angular's own bootstrap reports a failed start with console.error.
+      'no-console': ['error', {allow: ['error']}],
       '@angular-eslint/directive-selector': [
         'error',
         {
