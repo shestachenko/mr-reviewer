@@ -1,0 +1,12 @@
+---
+description: Keep README accurate when a change affects what it should say
+alwaysApply: true
+---
+
+# README
+
+Before you finish a change, check `README.md`.
+
+Update it when the change affects what a reader needs from that file: what this project is, how to run it, or where to read next. Leave it when the change does not affect that.
+
+Keep the edit as small as the change. Do not rewrite the whole file.
