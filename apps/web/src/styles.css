@@ -1,1 +1,65 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: light;
+  --bg: #f6f5f3;
+  --surface: #ffffff;
+  --text: #1c1917;
+  --muted: #57534e;
+  --border: #e7e5e4;
+  --accent: #1d4ed8;
+  --accept: #15803d;
+  --reject: #b91c1c;
+  --font: system-ui, sans-serif;
+  --mono: ui-monospace, sfmono-regular, menlo, consolas, monospace;
+  --radius: 0.5rem;
+  --read: 40rem;
+  --wide: 64rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+main {
+  max-width: var(--read);
+  margin: var(--space-6) auto;
+  padding: 0 var(--space-4);
+}
+
+h1 {
+  margin: 0 0 var(--space-3);
+  color: var(--text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

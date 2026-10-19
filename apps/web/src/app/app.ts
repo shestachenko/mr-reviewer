@@ -4,14 +4,6 @@ import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  styles: `
-    main {
-      max-width: 40rem;
-      margin: 4rem auto;
-      padding: 0 1.5rem;
-      font-family: system-ui, sans-serif;
-    }
-  `,
   template: `
     <main>
       <h1>MR Reviewer</h1>
