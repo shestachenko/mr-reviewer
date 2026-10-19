@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "lint": "ng lint"
   },
   "private": true,
   "packageManager": "npm@10.9.9",
@@ -20,10 +21,15 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "22.6.0",
     "@angular/build": "^22.2.3",
     "@angular/cli": "^22.2.3",
     "@angular/compiler-cli": "^22.2.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "22.6.0",
+    "eslint": "^10.12.0",
     "prettier": "^3.8.1",
-    "typescript": "~6.0.2"
+    "typescript": "~6.0.2",
+    "typescript-eslint": "8.71.0"
   }
 }

@@ -7,7 +7,7 @@ await app.register(cors, {
   origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
 });
 
-app.get('/health', async () => ({ ok: true }));
+app.get('/health', () => ({ ok: true }));
 
 const port = Number(process.env['PORT'] ?? 3000);
 const host = process.env['HOST'] ?? '::';
