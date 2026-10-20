@@ -42,6 +42,10 @@ main {
   padding: 0 var(--space-4);
 }
 
+main.wide {
+  max-width: var(--wide);
+}
+
 h1 {
   margin: 0 0 var(--space-3);
   color: var(--text);
@@ -62,4 +66,37 @@ a:focus-visible,
 button:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.repo {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.pulls {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.pulls li {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.pulls li:last-child {
+  border-bottom: 0;
+}
+
+.pulls a {
+  font-weight: 600;
+}
+
+.pulls p {
+  margin-top: var(--space-1);
+  color: var(--muted);
 }
