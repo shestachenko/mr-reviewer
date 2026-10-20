@@ -4,7 +4,7 @@ Screens follow this design. Colors, fonts, and distances are the custom properti
 
 ## Surface
 
-The page is light paper, `--bg`. A panel is `--surface` with a 1px `--border`. There is no gradient and no shadow.
+The page is dark, `--bg`. A panel is `--surface` with a 1px `--border`. There is no gradient and no shadow.
 
 ## Type
 
