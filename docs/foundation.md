@@ -22,7 +22,7 @@ A change with `skip_specs: true` still opens. The folder is there, and the missi
 
 ## The five steps
 
-1. **Meaning.** Why this change exists, taken from the OpenSpec change and from the project's markdown.
+1. **Meaning.** The task, the expected behavior, and the acceptance criteria, quoted from the OpenSpec change. Any assumptions the change records stay separate.
 2. **Project map.** A graph of the whole project, with the changed part highlighted.
 3. **Change map.** A closer graph of this change only.
 4. **Units.** One small bundle at a time. On each bundle the reviewer can accept it, reject it, or write a comment.
@@ -30,7 +30,7 @@ A change with `skip_specs: true` still opens. The folder is there, and the missi
 
 Steps 2 and 3 only show where the change sits. The verdict happens on step 4. Nothing is written to GitHub before step 5.
 
-The reviewer may know nothing about the system or this pull request. Step 1 has to teach the change without relying on the author's memory. A claim on step 1 quotes `proposal.md` or a requirement. A claim about code quotes a hunk. A sentence with no quote is marked as a retelling.
+The reviewer may know nothing about the system or this pull request. Step 1 has to teach the change without relying on the author's memory. A claim on step 1 quotes the task in `proposal.md`, a requirement name, a scenario, or an assumptions section. A claim about code quotes a hunk. A sentence with no quote is marked as a retelling.
 
 The route is prepared before the reviewer starts giving verdicts, and that snapshot is stored with the session. Coming back does not build a new route under them.
 
@@ -61,7 +61,7 @@ For example, a change `add-password-reset` has a requirement "The reset link exp
 
 Current behavior lives in `openspec/specs/<capability>/spec.md`.
 
-The change under review is one folder, `openspec/changes/<change>/`. `proposal.md` supplies the first step: Why, What Changes, Capabilities, and Impact. The delta specs under `specs/<capability>/spec.md` supply the requirements the units are cut from: `ADDED`, `MODIFIED`, and `REMOVED`, with their scenarios. `design.md` explains how the change is built and supports step 3. It may be absent. `tasks.md` is the checklist used to split a requirement that is too big, and it is the only cutting axis when `skip_specs: true`. `.openspec.yaml` holds the change metadata, including `skip_specs`.
+The change under review is one folder, `openspec/changes/<change>/`. The first step quotes `What Changes` from `proposal.md`, the requirement names and the WHEN/THEN lines of their scenarios from the delta specs under `specs/<capability>/spec.md`, and an `Assumptions` section when `design.md` or `proposal.md` has one. The same delta specs supply the requirements the units are cut from: `ADDED`, `MODIFIED`, and `REMOVED`, with their scenarios. `design.md` explains how the change is built and supports step 3. It may be absent. `tasks.md` is the checklist used to split a requirement that is too big, and it is the only cutting axis when `skip_specs: true`. `.openspec.yaml` holds the change metadata, including `skip_specs`.
 
 Project `*.md` files explain how the repository describes itself. Where they disagree with OpenSpec, step 1 follows OpenSpec.
 

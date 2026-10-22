@@ -5,11 +5,15 @@ import {firstValueFrom} from 'rxjs';
 
 import {positiveInteger} from './positive-integer';
 
-interface ProposalSections {
-  why: string | null;
-  whatChanges: string | null;
-  capabilities: string | null;
-  impact: string | null;
+interface MeaningScenario {
+  name: string;
+  text: string;
+}
+
+interface MeaningRequirement {
+  name: string;
+  text: string;
+  scenarios: MeaningScenario[];
 }
 
 interface BlockedMeaning {
@@ -21,17 +25,13 @@ interface BlockedMeaning {
 interface OpenMeaning {
   status: 'open';
   change: string;
-  proposal: string;
   skipSpecs: boolean;
-  sections: ProposalSections;
+  task: string | null;
+  requirements: MeaningRequirement[];
+  assumptions: string | null;
 }
 
 type MeaningBody = BlockedMeaning | OpenMeaning;
-
-interface MeaningQuote {
-  label: string;
-  text: string | null;
-}
 
 @Component({
   selector: 'app-pull-meaning',
@@ -63,17 +63,45 @@ interface MeaningQuote {
               <h2>Meaning</h2>
               <span class="meta">{{ meaning.change }}</span>
             </summary>
-            <p class="sha">{{ meaning.proposal }}</p>
             @if (meaning.skipSpecs) {
               <p>This change has no behavior contract. That is intentional.</p>
             }
-            @for (quote of quotes(meaning); track quote.label) {
-              <h2>{{ quote.label }}</h2>
-              @if (quote.text) {
-                <pre class="quote">{{ quote.text }}</pre>
-              } @else {
+            <h2>Task</h2>
+            @if (meaning.task) {
+              <pre class="quote">{{ meaning.task }}</pre>
+            } @else {
+              <p>This section is missing.</p>
+            }
+            @if (!meaning.skipSpecs) {
+              <h2>Expected behavior</h2>
+              @if (meaning.requirements.length === 0) {
                 <p>This section is missing.</p>
+              } @else {
+                <ul class="changes">
+                  @for (requirement of meaning.requirements; track $index) {
+                    <li>{{ requirement.name }}</li>
+                  }
+                </ul>
               }
+              <h2>Acceptance criteria</h2>
+              @if (!hasCriteria(meaning.requirements)) {
+                <p>This section is missing.</p>
+              } @else {
+                @for (requirement of meaning.requirements; track $index) {
+                  @for (scenario of requirement.scenarios; track $index) {
+                    <p>{{ requirement.name }}: {{ scenario.name }}</p>
+                    @if (scenario.text) {
+                      <pre class="quote">{{ scenario.text }}</pre>
+                    }
+                  }
+                }
+              }
+            }
+            @if (meaning.assumptions) {
+              <details>
+                <summary><h2>Assumptions</h2></summary>
+                <pre class="quote">{{ meaning.assumptions }}</pre>
+              </details>
             }
           </details>
           <p class="next"><a [routerLink]="['/pulls', number(), 'units', 1]">Units</a></p>
@@ -100,7 +128,7 @@ export class PullMeaning {
   }
 
   protected setExpanded(event: Event): void {
-    if (!(event.target instanceof HTMLDetailsElement)) {
+    if (!(event.target instanceof HTMLDetailsElement) || event.target !== event.currentTarget) {
       return;
     }
 
@@ -115,13 +143,8 @@ export class PullMeaning {
     return 'This pull request has more than one OpenSpec change, so the walkthrough stays closed.';
   }
 
-  protected quotes(meaning: OpenMeaning): MeaningQuote[] {
-    return [
-      {label: 'Why', text: meaning.sections.why},
-      {label: 'What Changes', text: meaning.sections.whatChanges},
-      {label: 'Capabilities', text: meaning.sections.capabilities},
-      {label: 'Impact', text: meaning.sections.impact},
-    ];
+  protected hasCriteria(requirements: MeaningRequirement[]): boolean {
+    return requirements.some((requirement) => requirement.scenarios.length > 0);
   }
 
   private async load(rawNumber: string): Promise<void> {
