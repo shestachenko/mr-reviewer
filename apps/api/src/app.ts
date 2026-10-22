@@ -1,12 +1,14 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
 
-import {createGitHubPullLookup} from './adapter/github/pull.js';
+import {createGitHubMr} from './adapter/github/mr.js';
+import {createGitHubMrMeaning} from './adapter/github/mr-meaning.js';
 import {createGitHubPullSource} from './adapter/github/pulls.js';
 import {createHealthAdapter} from './adapter/health.js';
-import {registerFindPull} from './http/find-pull.js';
 import {registerHealth} from './http/health.js';
 import {registerListPulls} from './http/list-pulls.js';
+import {registerMr} from './http/mr.js';
+import {registerMrMeaning} from './http/mr-meaning.js';
 
 function createConfig() {
   return {
@@ -31,7 +33,8 @@ export async function build() {
 
   registerHealth(app, createHealthAdapter());
   registerListPulls(app, createGitHubPullSource(config.github));
-  registerFindPull(app, createGitHubPullLookup(config.github));
+  registerMr(app, createGitHubMr(config.github));
+  registerMrMeaning(app, createGitHubMrMeaning(config.github));
 
   return {app, config};
 }

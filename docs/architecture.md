@@ -30,7 +30,9 @@ Domain is the core: entities and rules. It does not import the HTTP framework, a
 
 `GET /pulls` is `http/list-pulls.ts`, `usecase/list-pulls.ts`, `usecase/list-pulls.port.ts`, and `adapter/github/pulls.ts`. The usecase asks the port for the list and sets each pull's state in `domain/pull-request.ts`. The adapter reads GitHub. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502.
 
-`GET /pulls/:number` is `http/find-pull.ts`, `usecase/find-pull.ts`, `usecase/find-pull.port.ts`, and `adapter/github/pull.ts`. The usecase asks the port for that pull and sets its state in `domain/pull-request.ts`. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400.
+`GET /pulls/:number` is `http/mr.ts`, `usecase/mr.ts`, `usecase/mr.port.ts`, and `adapter/github/mr.ts`. The usecase asks the port for that MR and sets its state in `domain/pull-request.ts`. A missing MR comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400.
+
+`GET /pulls/:number/meaning` is `http/mr-meaning.ts`, `usecase/mr-meaning.ts`, `usecase/mr-meaning.port.ts`, and `adapter/github/mr-meaning.ts`. The usecase asks the port for the changed paths and the OpenSpec files in the one change folder, including a change kept under `openspec/changes/archive/<name>/`. `domain/meaning.ts` decides whether the walkthrough opens and cuts Why, What Changes, Capabilities, and Impact from `proposal.md`. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400. No change folder, or several, comes back as 200 and says why the walkthrough stays closed.
 
 ## Shared code
 
@@ -38,17 +40,17 @@ Shared code is a port or a domain service that more than one usecase uses. A sha
 
 ## Layout
 
-One action adds four files: handler, usecase, port, adapter. Use this shape, with `find-order` as the example of one action:
+One action adds four files: handler, usecase, port, adapter. Use this shape, with `order` as the example of one action:
 
 ```
 src/
   server.ts
   app.ts
   http/
-    find-order.ts
+    order.ts
   usecase/
-    find-order.ts
-    find-order.port.ts
+    order.ts
+    order.port.ts
   domain/
     order.ts
   adapter/

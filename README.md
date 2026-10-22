@@ -11,7 +11,7 @@ npm run dev
 
 The UI listens on http://localhost:4200. The API listens on http://localhost:3000.
 
-The first screen lists every pull request in `shestachenko/openspec-run`. A click opens that pull request and its first unit.
+The first screen lists every pull request in `shestachenko/openspec-run`. A click opens that pull request on the meaning step. That step quotes `proposal.md` and can be collapsed.
 
 Code style is in `docs/code-style.md`. Check it with `npm run lint`.
 

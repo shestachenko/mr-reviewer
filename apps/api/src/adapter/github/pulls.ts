@@ -1,12 +1,8 @@
 import {type ListedPull, type PullSource, PullSourceError} from '../../usecase/list-pulls.port.js';
 
-const perPage = 100;
+import {githubHeaders, type GitHubRepository, isRecord} from './client.js';
 
-interface GitHubRepository {
-  owner: string;
-  name: string;
-  token: string | undefined;
-}
+const perPage = 100;
 
 interface GitHubPull {
   number: number;
@@ -65,20 +61,6 @@ function pageUrl(repository: GitHubRepository, page: number): string {
   url.searchParams.set('page', String(page));
 
   return url.toString();
-}
-
-function githubHeaders(token: string | undefined): Record<string, string> {
-  const headers: Record<string, string> = {
-    accept: 'application/vnd.github+json',
-    'user-agent': 'mr-reviewer',
-    'x-github-api-version': '2022-11-28',
-  };
-
-  if (token) {
-    headers.authorization = `Bearer ${token}`;
-  }
-
-  return headers;
 }
 
 function readPulls(value: unknown): GitHubPull[] {
@@ -168,8 +150,4 @@ function toListedPull(pull: GitHubPull): ListedPull {
     author: pull.author,
     updatedAt: pull.updatedAt,
   };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }

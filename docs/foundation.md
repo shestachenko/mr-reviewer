@@ -14,7 +14,7 @@ The reviewer can leave a review and open another one. Leaving does not publish a
 
 ## When the walkthrough opens
 
-The walkthrough opens only when the diff contains exactly one `openspec/changes/<name>/` folder.
+The walkthrough opens only when the diff contains exactly one `openspec/changes/<name>/` folder. A finished change kept under `openspec/changes/archive/<name>/` is still that one folder.
 
 If that folder is missing, the walkthrough does not open. If the diff contains several change folders, that is a bad pull request and the walkthrough does not open either. In both cases the dashboard says why, and it writes nothing to GitHub.
 

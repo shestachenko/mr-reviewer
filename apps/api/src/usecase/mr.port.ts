@@ -1,11 +1,11 @@
-export interface FoundCommit {
+export interface MrCommit {
   sha: string;
   message: string;
   author: string | null;
   committedAt: string;
 }
 
-export interface FoundPull {
+export interface MrRecord {
   number: number;
   title: string;
   url: string;
@@ -17,11 +17,11 @@ export interface FoundPull {
   updatedAt: string;
   base: string;
   head: string;
-  commit: FoundCommit;
+  commit: MrCommit;
 }
 
-export interface PullLookup {
-  find(number: number): Promise<FoundPull | null>;
+export interface MrSource {
+  read(number: number): Promise<MrRecord | null>;
 }
 
-export class PullLookupError extends Error {}
+export class MrSourceError extends Error {}

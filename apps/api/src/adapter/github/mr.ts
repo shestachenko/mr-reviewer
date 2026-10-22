@@ -1,10 +1,6 @@
-import {type FoundCommit, type FoundPull, type PullLookup, PullLookupError} from '../../usecase/find-pull.port.js';
+import {type MrCommit, type MrRecord, type MrSource, MrSourceError} from '../../usecase/mr.port.js';
 
-interface GitHubRepository {
-  owner: string;
-  name: string;
-  token: string | undefined;
-}
+import {githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
 
 interface GitHubPull {
   number: number;
@@ -21,9 +17,9 @@ interface GitHubPull {
   headSha: string;
 }
 
-export function createGitHubPullLookup(repository: GitHubRepository): PullLookup {
+export function createGitHubMr(repository: GitHubRepository): MrSource {
   return {
-    async find(number) {
+    async read(number) {
       const pull = await fetchPull(repository, number);
 
       if (!pull) {
@@ -32,7 +28,7 @@ export function createGitHubPullLookup(repository: GitHubRepository): PullLookup
 
       const commit = await fetchCommit(repository, pull.headSha);
 
-      return toFoundPull(pull, commit);
+      return toMrRecord(pull, commit);
     },
   };
 }
@@ -45,54 +41,36 @@ async function fetchPull(repository: GitHubRepository, number: number): Promise<
   }
 
   if (!response.ok) {
-    throw new PullLookupError(`GitHub responded ${String(response.status)}.`);
+    throw new MrSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   const pull = readPull(await response.json());
 
   if (!pull) {
-    throw new PullLookupError('GitHub returned a pull request the page cannot read.');
+    throw new MrSourceError('GitHub returned a pull request the page cannot read.');
   }
 
   return pull;
 }
 
-async function fetchCommit(repository: GitHubRepository, sha: string): Promise<FoundCommit> {
+async function fetchCommit(repository: GitHubRepository, sha: string): Promise<MrCommit> {
   const response = await githubFetch(repository, `commits/${sha}`);
 
   if (!response.ok) {
-    throw new PullLookupError(`GitHub responded ${String(response.status)}.`);
+    throw new MrSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   const commit = readCommit(await response.json());
 
   if (!commit) {
-    throw new PullLookupError('GitHub returned a commit the page cannot read.');
+    throw new MrSourceError('GitHub returned a commit the page cannot read.');
   }
 
   return commit;
 }
 
 function githubFetch(repository: GitHubRepository, path: string): Promise<Response> {
-  return fetch(githubUrl(repository, path), {headers: githubHeaders(repository.token)});
-}
-
-function githubUrl(repository: GitHubRepository, path: string): string {
-  return `https://api.github.com/repos/${repository.owner}/${repository.name}/${path}`;
-}
-
-function githubHeaders(token: string | undefined): Record<string, string> {
-  const headers: Record<string, string> = {
-    accept: 'application/vnd.github+json',
-    'user-agent': 'mr-reviewer',
-    'x-github-api-version': '2022-11-28',
-  };
-
-  if (token) {
-    headers.authorization = `Bearer ${token}`;
-  }
-
-  return headers;
+  return fetch(githubRepoUrl(repository, path), {headers: githubHeaders(repository.token)});
 }
 
 function readPull(value: unknown): GitHubPull | null {
@@ -188,7 +166,7 @@ function readRef(value: unknown): string | null {
   return ref;
 }
 
-function readCommit(value: unknown): FoundCommit | null {
+function readCommit(value: unknown): MrCommit | null {
   if (!isRecord(value)) {
     return null;
   }
@@ -238,7 +216,7 @@ function readAuthor(user: unknown): string | null {
   return login;
 }
 
-function toFoundPull(pull: GitHubPull, commit: FoundCommit): FoundPull {
+function toMrRecord(pull: GitHubPull, commit: MrCommit): MrRecord {
   return {
     number: pull.number,
     title: pull.title,
@@ -253,8 +231,4 @@ function toFoundPull(pull: GitHubPull, commit: FoundCommit): FoundPull {
     head: pull.head,
     commit,
   };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
 }
