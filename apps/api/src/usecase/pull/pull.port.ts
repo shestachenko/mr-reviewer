@@ -1,11 +1,11 @@
-export interface MrCommit {
+export interface PullCommit {
   sha: string;
   message: string;
   author: string | null;
   committedAt: string;
 }
 
-export interface MrRecord {
+export interface PullRecord {
   number: number;
   title: string;
   url: string;
@@ -17,11 +17,11 @@ export interface MrRecord {
   updatedAt: string;
   base: string;
   head: string;
-  commit: MrCommit;
+  commit: PullCommit;
 }
 
-export interface MrSource {
-  read(number: number): Promise<MrRecord | null>;
+export interface PullSource {
+  read(number: number): Promise<PullRecord | null>;
 }
 
-export class MrSourceError extends Error {}
+export class PullSourceError extends Error {}

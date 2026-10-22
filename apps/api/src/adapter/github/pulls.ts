@@ -1,4 +1,4 @@
-import {type ListedPull, type PullSource, PullSourceError} from '../../usecase/list-pulls.port.js';
+import {type ListedPull, type PullSource, PullSourceError} from '../../usecase/list-pulls/list-pulls.port.js';
 
 import {githubHeaders, type GitHubRepository, isRecord} from './client.js';
 

@@ -3,8 +3,8 @@ export interface ChangeTree {
   read(path: string): Promise<string | null>;
 }
 
-export interface MrMeaningSource {
+export interface PullMeaningSource {
   read(number: number): Promise<ChangeTree | null>;
 }
 
-export class MrMeaningSourceError extends Error {}
+export class PullMeaningSourceError extends Error {}

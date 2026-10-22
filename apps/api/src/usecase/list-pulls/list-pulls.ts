@@ -1,4 +1,4 @@
-import {type PullRequest, pullState} from '../domain/pull-request.js';
+import {type PullRequest, pullState} from '../../domain/pull-request.js';
 
 import {type ListedPull, type PullSource, PullSourceError} from './list-pulls.port.js';
 

@@ -1,4 +1,4 @@
-import {type MrMeaningSource, MrMeaningSourceError} from '../../usecase/mr-meaning.port.js';
+import {type PullMeaningSource, PullMeaningSourceError} from '../../usecase/pull-meaning/pull-meaning.port.js';
 
 import {githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
 
@@ -9,7 +9,7 @@ interface GitHubChangedFile {
   previousFilename: string | null;
 }
 
-export function createGitHubMrMeaning(repository: GitHubRepository): MrMeaningSource {
+export function createGitHubPullMeaning(repository: GitHubRepository): PullMeaningSource {
   return {
     async read(number) {
       const sha = await fetchHeadSha(repository, number);
@@ -40,13 +40,13 @@ async function fetchHeadSha(repository: GitHubRepository, number: number): Promi
   }
 
   if (!response.ok) {
-    throw new MrMeaningSourceError(`GitHub responded ${String(response.status)}.`);
+    throw new PullMeaningSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   const sha = readHeadSha(await response.json());
 
   if (!sha) {
-    throw new MrMeaningSourceError('GitHub returned a pull request the page cannot read.');
+    throw new PullMeaningSourceError('GitHub returned a pull request the page cannot read.');
   }
 
   return sha;
@@ -78,7 +78,7 @@ async function fetchFiles(repository: GitHubRepository, number: number, page: nu
   const response = await fetch(url, {headers: githubHeaders(repository.token)});
 
   if (!response.ok) {
-    throw new MrMeaningSourceError(`GitHub responded ${String(response.status)}.`);
+    throw new PullMeaningSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   return readFiles(await response.json());
@@ -98,7 +98,7 @@ async function readText(repository: GitHubRepository, sha: string, path: string)
   }
 
   if (!response.ok) {
-    throw new MrMeaningSourceError(`GitHub responded ${String(response.status)}.`);
+    throw new PullMeaningSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   return response.text();
@@ -126,14 +126,14 @@ function readHeadSha(value: unknown): string | null {
 
 function readFiles(value: unknown): GitHubChangedFile[] {
   if (!Array.isArray(value)) {
-    throw new MrMeaningSourceError('GitHub did not return a list.');
+    throw new PullMeaningSourceError('GitHub did not return a list.');
   }
 
   return value.map((item) => {
     const file = readFile(item);
 
     if (!file) {
-      throw new MrMeaningSourceError('GitHub returned a file the page cannot read.');
+      throw new PullMeaningSourceError('GitHub returned a file the page cannot read.');
     }
 
     return file;

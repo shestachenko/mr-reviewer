@@ -44,3 +44,17 @@ export function pullState(pull: {draft: boolean; merged: boolean; closed: boolea
 
   return 'closed';
 }
+
+export function pullNumber(value: string): number | null {
+  if (!/^[1-9]\d*$/.test(value)) {
+    return null;
+  }
+
+  const number = Number(value);
+
+  if (!Number.isSafeInteger(number)) {
+    return null;
+  }
+
+  return number;
+}

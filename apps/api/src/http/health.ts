@@ -1,8 +1,6 @@
-import type {FastifyInstance} from 'fastify';
+import {checkHealth} from '../usecase/health/health.js';
+import type {HealthPort} from '../usecase/health/health.port.js';
 
-import {checkHealth} from '../usecase/health.js';
-import type {HealthPort} from '../usecase/health.port.js';
-
-export function registerHealth(app: FastifyInstance, health: HealthPort) {
-  app.get('/health', () => checkHealth(health));
+export function getHealth(health: HealthPort) {
+  return checkHealth(health);
 }

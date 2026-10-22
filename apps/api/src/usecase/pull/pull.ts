@@ -1,34 +1,34 @@
-import {type PullCommit, type PullDetails, pullState} from '../domain/pull-request.js';
+import {type PullDetails, pullState} from '../../domain/pull-request.js';
 
-import {type MrCommit, type MrRecord, type MrSource, MrSourceError} from './mr.port.js';
+import {type PullCommit, type PullRecord, type PullSource, PullSourceError} from './pull.port.js';
 
-export class MrNotFound extends Error {}
+export class PullNotFound extends Error {}
 
-export class MrFailed extends Error {}
+export class PullFailed extends Error {}
 
-export async function mr(source: MrSource, number: number): Promise<PullDetails> {
+export async function pull(source: PullSource, number: number): Promise<PullDetails> {
   try {
     const record = await source.read(number);
 
     if (!record) {
-      throw new MrNotFound();
+      throw new PullNotFound();
     }
 
     return toPullDetails(record);
   } catch (error) {
-    if (error instanceof MrNotFound) {
+    if (error instanceof PullNotFound) {
       throw error;
     }
 
-    if (error instanceof MrSourceError) {
-      throw new MrFailed(error.message);
+    if (error instanceof PullSourceError) {
+      throw new PullFailed(error.message);
     }
 
     throw error;
   }
 }
 
-function toPullDetails(record: MrRecord): PullDetails {
+function toPullDetails(record: PullRecord): PullDetails {
   return {
     number: record.number,
     title: record.title,
@@ -43,7 +43,7 @@ function toPullDetails(record: MrRecord): PullDetails {
   };
 }
 
-function toCommit(commit: MrCommit): PullCommit {
+function toCommit(commit: PullCommit): PullDetails['commit'] {
   return {
     sha: commit.sha,
     message: subject(commit.message),

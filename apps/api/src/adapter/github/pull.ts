@@ -1,4 +1,4 @@
-import {type MrCommit, type MrRecord, type MrSource, MrSourceError} from '../../usecase/mr.port.js';
+import {type PullCommit, type PullRecord, type PullSource, PullSourceError} from '../../usecase/pull/pull.port.js';
 
 import {githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
 
@@ -17,7 +17,7 @@ interface GitHubPull {
   headSha: string;
 }
 
-export function createGitHubMr(repository: GitHubRepository): MrSource {
+export function createGitHubPull(repository: GitHubRepository): PullSource {
   return {
     async read(number) {
       const pull = await fetchPull(repository, number);
@@ -28,7 +28,7 @@ export function createGitHubMr(repository: GitHubRepository): MrSource {
 
       const commit = await fetchCommit(repository, pull.headSha);
 
-      return toMrRecord(pull, commit);
+      return toPullRecord(pull, commit);
     },
   };
 }
@@ -41,29 +41,29 @@ async function fetchPull(repository: GitHubRepository, number: number): Promise<
   }
 
   if (!response.ok) {
-    throw new MrSourceError(`GitHub responded ${String(response.status)}.`);
+    throw new PullSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   const pull = readPull(await response.json());
 
   if (!pull) {
-    throw new MrSourceError('GitHub returned a pull request the page cannot read.');
+    throw new PullSourceError('GitHub returned a pull request the page cannot read.');
   }
 
   return pull;
 }
 
-async function fetchCommit(repository: GitHubRepository, sha: string): Promise<MrCommit> {
+async function fetchCommit(repository: GitHubRepository, sha: string): Promise<PullCommit> {
   const response = await githubFetch(repository, `commits/${sha}`);
 
   if (!response.ok) {
-    throw new MrSourceError(`GitHub responded ${String(response.status)}.`);
+    throw new PullSourceError(`GitHub responded ${String(response.status)}.`);
   }
 
   const commit = readCommit(await response.json());
 
   if (!commit) {
-    throw new MrSourceError('GitHub returned a commit the page cannot read.');
+    throw new PullSourceError('GitHub returned a commit the page cannot read.');
   }
 
   return commit;
@@ -166,7 +166,7 @@ function readRef(value: unknown): string | null {
   return ref;
 }
 
-function readCommit(value: unknown): MrCommit | null {
+function readCommit(value: unknown): PullCommit | null {
   if (!isRecord(value)) {
     return null;
   }
@@ -216,7 +216,7 @@ function readAuthor(user: unknown): string | null {
   return login;
 }
 
-function toMrRecord(pull: GitHubPull, commit: MrCommit): MrRecord {
+function toPullRecord(pull: GitHubPull, commit: PullCommit): PullRecord {
   return {
     number: pull.number,
     title: pull.title,
