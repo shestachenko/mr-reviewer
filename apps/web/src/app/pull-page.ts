@@ -47,7 +47,7 @@ const whenFormat = new Intl.DateTimeFormat('en', {
       } @else if (status() === 'error') {
         <p>The pull request did not load.</p>
       } @else if (pull(); as pull) {
-        <details class="pull" open>
+        <details class="pull">
           <summary>
             <h1>{{ pull.title }}</h1>
             <span class="meta">{{ summary(pull) }}</span>
