@@ -1,16 +1,21 @@
 import cors from '@fastify/cors';
-import type {FastifyInstance} from 'fastify';
 import Fastify from 'fastify';
 
+import {createGitHubPullSource} from './adapter/github/pulls.js';
 import {createHealthAdapter} from './adapter/health.js';
 import {registerHealth} from './http/health.js';
-import {listPullRequests} from './pulls.js';
+import {registerListPulls} from './http/list-pulls.js';
 
 function createConfig() {
   return {
     port: Number(process.env['PORT'] ?? 3000),
     host: process.env['HOST'] ?? '::',
     corsOrigins: ['http://localhost:4200', 'http://127.0.0.1:4200'],
+    github: {
+      owner: 'shestachenko',
+      name: 'openspec-run',
+      token: process.env['GITHUB_TOKEN'],
+    },
   };
 }
 
@@ -23,20 +28,7 @@ export async function build() {
   });
 
   registerHealth(app, createHealthAdapter());
-  registerPulls(app);
+  registerListPulls(app, createGitHubPullSource(config.github));
 
   return {app, config};
-}
-
-function registerPulls(app: FastifyInstance) {
-  app.get('/pulls', async (_request, reply) => {
-    try {
-      return await listPullRequests();
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'GitHub request failed.';
-      app.log.error(message);
-
-      return reply.code(502).send({error: 'github'});
-    }
-  });
 }

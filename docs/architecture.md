@@ -24,7 +24,11 @@ Domain is the core: entities and rules. It does not import the HTTP framework, a
 
 ## Composition
 
-`apps/api/src/app.ts` is the composition root. It creates config, the logger, connections, and adapters, passes them inward, and registers handlers. `apps/api/src/server.ts` only listens. The action that exists is `GET /health`: `http/health.ts`, `usecase/health.ts`, `usecase/health.port.ts`, and `adapter/health.ts`. `app.ts` creates that adapter and passes it into the handler. The adapter reports that the process is up.
+`apps/api/src/app.ts` is the composition root. It creates config, the logger, connections, and adapters, passes them inward, and registers handlers. `apps/api/src/server.ts` only listens. `app.ts` does not contain an action.
+
+`GET /health` is `http/health.ts`, `usecase/health.ts`, `usecase/health.port.ts`, and `adapter/health.ts`. The health adapter reports that the process is up.
+
+`GET /pulls` is `http/list-pulls.ts`, `usecase/list-pulls.ts`, `usecase/list-pulls.port.ts`, and `adapter/github/pulls.ts`. The usecase asks the port for the list and sets each pull's state in `domain/pull-request.ts`. The adapter reads GitHub. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502.
 
 ## Shared code
 
