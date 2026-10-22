@@ -24,7 +24,7 @@ Domain is the core: entities and rules. It does not import the HTTP framework, a
 
 ## Composition
 
-`apps/api/src/app.ts` is the composition root. It creates config, the logger, connections, and adapters, passes them inward, and registers handlers. `apps/api/src/server.ts` only listens. `GET /health` is registered from `app.ts`. It has no port or adapter until it needs a database or a remote API.
+`apps/api/src/app.ts` is the composition root. It creates config, the logger, connections, and adapters, passes them inward, and registers handlers. `apps/api/src/server.ts` only listens. The action that exists is `GET /health`: `http/health.ts`, `usecase/health.ts`, `usecase/health.port.ts`, and `adapter/health.ts`. `app.ts` creates that adapter and passes it into the handler. The adapter reports that the process is up.
 
 ## Shared code
 
