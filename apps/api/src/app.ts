@@ -1,8 +1,10 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
 
+import {createGitHubPullLookup} from './adapter/github/pull.js';
 import {createGitHubPullSource} from './adapter/github/pulls.js';
 import {createHealthAdapter} from './adapter/health.js';
+import {registerFindPull} from './http/find-pull.js';
 import {registerHealth} from './http/health.js';
 import {registerListPulls} from './http/list-pulls.js';
 
@@ -29,6 +31,7 @@ export async function build() {
 
   registerHealth(app, createHealthAdapter());
   registerListPulls(app, createGitHubPullSource(config.github));
+  registerFindPull(app, createGitHubPullLookup(config.github));
 
   return {app, config};
 }

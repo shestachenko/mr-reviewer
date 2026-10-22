@@ -100,3 +100,64 @@ button:focus-visible {
   margin-top: var(--space-1);
   color: var(--muted);
 }
+
+h2 {
+  margin: 0 0 var(--space-2);
+  color: var(--text);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.back {
+  margin: 0 0 var(--space-4);
+}
+
+.meta {
+  margin: 0;
+  color: var(--muted);
+}
+
+.panel {
+  margin-top: var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.unit {
+  padding: var(--space-4);
+}
+
+.facts {
+  margin: 0;
+}
+
+.facts > div {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.facts > div:last-child {
+  border-bottom: 0;
+}
+
+.facts dt {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.facts dd {
+  margin: var(--space-1) 0 0;
+}
+
+.note {
+  margin-top: var(--space-1);
+  color: var(--muted);
+}
+
+.sha {
+  font-family: var(--mono);
+  overflow-wrap: anywhere;
+}

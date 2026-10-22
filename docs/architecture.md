@@ -30,6 +30,8 @@ Domain is the core: entities and rules. It does not import the HTTP framework, a
 
 `GET /pulls` is `http/list-pulls.ts`, `usecase/list-pulls.ts`, `usecase/list-pulls.port.ts`, and `adapter/github/pulls.ts`. The usecase asks the port for the list and sets each pull's state in `domain/pull-request.ts`. The adapter reads GitHub. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502.
 
+`GET /pulls/:number` is `http/find-pull.ts`, `usecase/find-pull.ts`, `usecase/find-pull.port.ts`, and `adapter/github/pull.ts`. The usecase asks the port for that pull and sets its state in `domain/pull-request.ts`. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400.
+
 ## Shared code
 
 Shared code is a port or a domain service that more than one usecase uses. A shared folder appears only when that code exists. The test is the dependency direction: shared code still points inward.
