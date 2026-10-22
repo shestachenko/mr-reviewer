@@ -7,10 +7,10 @@ import {positiveInteger} from './positive-integer';
   template: `
     <section class="panel unit">
       @if (place() === null) {
-        <p>В адресе нет юнита.</p>
+        <p>This address is not a unit.</p>
       } @else {
-        <h2>Юнит {{ place() }}</h2>
-        <p>Нарезки ещё нет.</p>
+        <h2>Unit {{ place() }}</h2>
+        <p>Units are not cut yet.</p>
       }
     </section>
   `,

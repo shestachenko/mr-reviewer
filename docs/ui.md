@@ -30,7 +30,7 @@ A list is rows separated by `--border`. It is not a grid of cards.
 
 One primary button on a screen. Its fill is `--accent`, its label is `--surface`, and its corners are `--radius`. Any other action is `--accent` text on no fill.
 
-The interface copy is Russian. OpenSpec and markdown stay in the language of those files.
+The interface copy is English. OpenSpec and markdown stay in the language of those files.
 
 ## States
 

@@ -26,7 +26,7 @@ interface PullDetails {
   commit: PullCommit;
 }
 
-const whenFormat = new Intl.DateTimeFormat('ru', {
+const whenFormat = new Intl.DateTimeFormat('en', {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
@@ -39,57 +39,33 @@ const whenFormat = new Intl.DateTimeFormat('ru', {
   imports: [RouterLink, RouterOutlet],
   template: `
     <main class="wide">
-      <p class="back"><a routerLink="/">Назад</a></p>
+      <p class="back"><a routerLink="/">Back</a></p>
       @if (status() === 'loading') {
-        <p>MR ещё не пришёл.</p>
+        <p>The pull request has not arrived.</p>
       } @else if (status() === 'missing') {
-        <p>Такого MR нет.</p>
+        <p>There is no such pull request.</p>
       } @else if (status() === 'error') {
-        <p>MR не загрузился.</p>
+        <p>The pull request did not load.</p>
       } @else if (pull(); as pull) {
-        <h1>{{ pull.title }}</h1>
-        <p class="meta">{{ heading(pull) }}</p>
-        <section class="panel">
-          <dl class="facts">
-            <div>
-              <dt>Автор</dt>
-              <dd>{{ author(pull) }}</dd>
-            </div>
-            <div>
-              <dt>Открыт</dt>
-              <dd>{{ when(pull.createdAt) }}</dd>
-            </div>
-            <div>
-              <dt>Обновлён</dt>
-              <dd>{{ when(pull.updatedAt) }}</dd>
-            </div>
-            <div>
-              <dt>Ветки</dt>
-              <dd class="sha">{{ branches(pull) }}</dd>
-            </div>
-            <div>
-              <dt>Последний коммит</dt>
-              <dd>
-                <p>
-                  <span class="sha" [title]="pull.commit.sha">{{ shortSha(pull.commit.sha) }}</span>
-                  @if (pull.commit.message) {
-                    {{ pull.commit.message }}
-                  }
-                </p>
-                <p class="note">{{ commitMeta(pull.commit) }}</p>
-              </dd>
-            </div>
-            <div>
-              <dt>GitHub</dt>
-              <dd>
-                <a [href]="pull.url" target="_blank" rel="noopener noreferrer">Открыть</a>
-              </dd>
-            </div>
-          </dl>
-        </section>
+        <details class="pull" open>
+          <summary>
+            <h1>{{ pull.title }}</h1>
+            <span class="meta">{{ summary(pull) }}</span>
+          </summary>
+          <p>Opened {{ when(pull.createdAt) }} · Updated {{ when(pull.updatedAt) }}</p>
+          <p class="sha">{{ branches(pull) }}</p>
+          <p>
+            <span class="sha" [title]="pull.commit.sha">{{ shortSha(pull.commit.sha) }}</span>
+            @if (pull.commit.message) {
+              {{ pull.commit.message }}
+            }
+          </p>
+          <p class="note">{{ commitMeta(pull.commit) }}</p>
+          <p><a [href]="pull.url" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+        </details>
         <router-outlet />
       } @else {
-        <p>MR не загрузился.</p>
+        <p>The pull request did not load.</p>
       }
     </main>
   `,
@@ -108,12 +84,12 @@ export class PullPage {
     });
   }
 
-  protected heading(pull: PullDetails): string {
-    return `#${String(pull.number)} · ${pullStateLabel[pull.state]}`;
+  protected summary(pull: PullDetails): string {
+    return `#${String(pull.number)} · ${pullStateLabel[pull.state]} · ${this.author(pull)}`;
   }
 
   protected author(pull: PullDetails): string {
-    return pull.author ?? 'не указан';
+    return pull.author ?? 'not set';
   }
 
   protected when(value: string): string {
@@ -121,7 +97,7 @@ export class PullPage {
   }
 
   protected branches(pull: PullDetails): string {
-    return `${pull.head} в ${pull.base}`;
+    return `${pull.head} into ${pull.base}`;
   }
 
   protected shortSha(sha: string): string {

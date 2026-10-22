@@ -73,7 +73,7 @@ The GitHub review status is not chosen. The working assumption is: any reject be
 
 How the two graphs are built is not chosen. The working assumption is that step 2 uses capabilities from `openspec/specs/` and modules from the repository tree, highlighting the capabilities and modules this change touches. Step 3 uses the change's capabilities, the decisions in `design.md`, and the diff files grouped into the same units. A verdict is not given from a graph.
 
-The interface language is not chosen. The working assumption is Russian for the interface, with the OpenSpec and markdown text left in the language of those files.
+The interface language is not chosen. The working assumption is English for the interface, with the OpenSpec and markdown text left in the language of those files.
 
 ## Not in this version
 

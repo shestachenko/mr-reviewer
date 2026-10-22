@@ -19,7 +19,7 @@ interface PullListBody {
   pulls: PullRequest[];
 }
 
-const updatedAtFormat = new Intl.DateTimeFormat('ru', {
+const updatedAtFormat = new Intl.DateTimeFormat('en', {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
@@ -30,15 +30,15 @@ const updatedAtFormat = new Intl.DateTimeFormat('ru', {
   imports: [RouterLink],
   template: `
     <main class="wide">
-      <h1>Список MR</h1>
+      <h1>Pull requests</h1>
       @if (status() === 'loading') {
-        <p>Список ещё не пришёл.</p>
+        <p>The list has not arrived.</p>
       } @else if (status() === 'error') {
-        <p>Список не загрузился.</p>
+        <p>The list did not load.</p>
       } @else {
         <p class="repo">{{ repository() }}</p>
         @if (pulls().length === 0) {
-          <p>В проекте нет MR.</p>
+          <p>This project has no pull requests.</p>
         } @else {
           <ul class="pulls">
             @for (pull of pulls(); track pull.number) {
