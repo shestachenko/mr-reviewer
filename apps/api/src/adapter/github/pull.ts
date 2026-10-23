@@ -1,6 +1,6 @@
 import {type PullCommit, type PullRecord, type PullSource, PullSourceError} from '../../usecase/pull/pull.port.js';
 
-import {githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
+import {githubFetch, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
 
 interface GitHubPull {
   number: number;
@@ -34,7 +34,7 @@ export function createGitHubPull(repository: GitHubRepository): PullSource {
 }
 
 async function fetchPull(repository: GitHubRepository, number: number): Promise<GitHubPull | null> {
-  const response = await githubFetch(repository, `pulls/${String(number)}`);
+  const response = await githubFetch(repository, githubRepoUrl(repository, `pulls/${String(number)}`));
 
   if (response.status === 404) {
     return null;
@@ -54,7 +54,7 @@ async function fetchPull(repository: GitHubRepository, number: number): Promise<
 }
 
 async function fetchCommit(repository: GitHubRepository, sha: string): Promise<PullCommit> {
-  const response = await githubFetch(repository, `commits/${sha}`);
+  const response = await githubFetch(repository, githubRepoUrl(repository, `commits/${sha}`));
 
   if (!response.ok) {
     throw new PullSourceError(`GitHub responded ${String(response.status)}.`);
@@ -67,10 +67,6 @@ async function fetchCommit(repository: GitHubRepository, sha: string): Promise<P
   }
 
   return commit;
-}
-
-function githubFetch(repository: GitHubRepository, path: string): Promise<Response> {
-  return fetch(githubRepoUrl(repository, path), {headers: githubHeaders(repository.token)});
 }
 
 function readPull(value: unknown): GitHubPull | null {

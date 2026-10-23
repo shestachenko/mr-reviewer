@@ -1,6 +1,6 @@
 import {type ListedPull, type PullSource, PullSourceError} from '../../usecase/list-pulls/list-pulls.port.js';
 
-import {githubHeaders, type GitHubRepository, isRecord} from './client.js';
+import {githubFetch, type GitHubRepository, isRecord} from './client.js';
 
 const perPage = 100;
 
@@ -41,7 +41,7 @@ export function createGitHubPullSource(repository: GitHubRepository): PullSource
 }
 
 async function fetchPage(repository: GitHubRepository, page: number): Promise<GitHubPull[]> {
-  const response = await fetch(pageUrl(repository, page), {headers: githubHeaders(repository.token)});
+  const response = await githubFetch(repository, pageUrl(repository, page));
 
   if (!response.ok) {
     throw new PullSourceError(`GitHub responded ${String(response.status)}.`);

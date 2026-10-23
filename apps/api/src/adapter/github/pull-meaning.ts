@@ -1,6 +1,6 @@
 import {type PullMeaningSource, PullMeaningSourceError} from '../../usecase/pull-meaning/pull-meaning.port.js';
 
-import {githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
+import {githubFetch, githubHeaders, type GitHubRepository, githubRepoUrl, isRecord} from './client.js';
 
 const perPage = 100;
 
@@ -31,9 +31,7 @@ export function createGitHubPullMeaning(repository: GitHubRepository): PullMeani
 }
 
 async function fetchHeadSha(repository: GitHubRepository, number: number): Promise<string | null> {
-  const response = await fetch(githubRepoUrl(repository, `pulls/${String(number)}`), {
-    headers: githubHeaders(repository.token),
-  });
+  const response = await githubFetch(repository, githubRepoUrl(repository, `pulls/${String(number)}`));
 
   if (response.status === 404) {
     return null;
@@ -75,7 +73,7 @@ async function fetchFiles(repository: GitHubRepository, number: number, page: nu
   url.searchParams.set('per_page', String(perPage));
   url.searchParams.set('page', String(page));
 
-  const response = await fetch(url, {headers: githubHeaders(repository.token)});
+  const response = await githubFetch(repository, url);
 
   if (!response.ok) {
     throw new PullMeaningSourceError(`GitHub responded ${String(response.status)}.`);
@@ -91,7 +89,7 @@ async function readText(repository: GitHubRepository, sha: string, path: string)
   const headers = githubHeaders(repository.token);
   headers.accept = 'application/vnd.github.raw';
 
-  const response = await fetch(url, {headers});
+  const response = await githubFetch(repository, url, headers);
 
   if (response.status === 404) {
     return null;

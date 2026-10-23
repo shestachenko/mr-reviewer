@@ -20,6 +20,8 @@ The usecase and its port share one folder, `usecase/<action>/`. The files are `<
 
 The port is the interface the usecase owns. The adapter is the only code that knows SQL, an HTTP client, or the shape of a remote API. Several usecases may call the same port and then share one adapter.
 
+The GitHub client stores a successful response, and a not-found response, in `.cache/github`. The next call reads that file. The file stays until it is deleted. A rate limit or another failure is not stored, so the next call tries GitHub again.
+
 ## Domain
 
 Domain is the core: entities and rules. It does not import the HTTP framework, a database client, or an HTTP client.
@@ -39,6 +41,7 @@ The `:number` check is `pullNumber` in `domain/pull-request.ts`. The handlers fo
 `GET /pulls/:number` is `http/pull.ts`, `usecase/pull/pull.ts`, `usecase/pull/pull.port.ts`, and `adapter/github/pull.ts`. The usecase asks the port for that pull and sets its state in `domain/pull-request.ts`. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400.
 
 `GET /pulls/:number/meaning` is `http/pull-meaning.ts`, `usecase/pull-meaning/pull-meaning.ts`, `usecase/pull-meaning/pull-meaning.port.ts`, and `adapter/github/pull-meaning.ts`. The usecase asks the port for the changed paths and the OpenSpec files in the one change folder, including a change kept under `openspec/changes/archive/<name>/`. `domain/meaning.ts` decides whether the walkthrough opens and quotes the task, the requirement names, the scenario criteria, and any assumptions section from that change. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400. No change folder, or several, comes back as 200 and says why the walkthrough stays closed.
+
 
 ## Shared code
 
