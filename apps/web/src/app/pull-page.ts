@@ -1,9 +1,11 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Component, effect, inject, input, signal} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 
 import {positiveInteger} from './positive-integer';
+import {PullMap} from './pull-map';
+import {PullMeaning} from './pull-meaning';
 import {type PullState, pullStateLabel} from './pull-state';
 
 interface PullCommit {
@@ -36,7 +38,7 @@ const whenFormat = new Intl.DateTimeFormat('en', {
 
 @Component({
   selector: 'app-pull-page',
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, PullMeaning, PullMap],
   template: `
     <main class="wide">
       <p class="back"><a routerLink="/">Back</a></p>
@@ -63,7 +65,8 @@ const whenFormat = new Intl.DateTimeFormat('en', {
           <p class="note">{{ commitMeta(pull.commit) }}</p>
           <p><a [href]="pull.url" target="_blank" rel="noopener noreferrer">GitHub</a></p>
         </details>
-        <router-outlet />
+        <app-pull-meaning [number]="number()" />
+        <app-pull-map [number]="number()" />
       } @else {
         <p>The pull request did not load.</p>
       }

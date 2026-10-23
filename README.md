@@ -13,7 +13,7 @@ The UI listens on http://localhost:4200. The API listens on http://localhost:300
 
 A GitHub response is written to `.cache/github` and the next call reads that file. Delete the folder when the responses should be fetched again.
 
-The first screen lists every pull request in `shestachenko/openspec-run`. A click opens that pull request on the meaning step. That step quotes the task, the expected behavior, and the acceptance criteria. Recorded assumptions stay separate, and the step can be collapsed. The next step is the project map: each HTTP route, then its handler, usecase, and adapter. A part this change touches says changed.
+The first screen lists every pull request in `shestachenko/openspec-run`. A click opens that pull request. The page quotes the task, the expected behavior, and the acceptance criteria. Recorded assumptions stay separate, and that block can be collapsed. The project map is on the same page and can be collapsed too: each HTTP route, then its handler, usecase, and adapter. A part this change touches says changed.
 
 Code style is in `docs/code-style.md`. Check it with `npm run lint`.
 

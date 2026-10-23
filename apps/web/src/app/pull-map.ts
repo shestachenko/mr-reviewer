@@ -1,6 +1,5 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Component, effect, inject, input, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 
 import {positiveInteger} from './positive-integer';
@@ -74,81 +73,79 @@ interface GraphDiagram {
 
 @Component({
   selector: 'app-pull-map',
-  imports: [RouterLink],
   template: `
-    @if (status() === 'loading') {
-      <p>The project map has not arrived.</p>
-    } @else if (status() === 'missing') {
-      <p>There is no such pull request.</p>
-    } @else if (status() === 'error') {
-      <p>The project map did not load.</p>
-    } @else if (map(); as map) {
-      @if (map.status === 'blocked') {
-        <section class="panel unit">
-          <h2>Project map</h2>
-          <p>{{ blocked(map) }}</p>
-          @if (map.changes.length > 0) {
-            <ul class="changes">
-              @for (change of map.changes; track change) {
-                <li>{{ change }}</li>
-              }
-            </ul>
-          }
-        </section>
-      } @else {
-        @let picture = drawn(map);
-        <section class="panel unit map">
-          <p class="step"><a [routerLink]="['/pulls', number(), 'meaning']">Meaning</a></p>
-          <h2 class="current">Project map</h2>
-          @if (map.routes.length === 0) {
-            <p>This section is missing.</p>
+    <section class="panel fold">
+      @if (status() === 'loading') {
+        <p>The project map has not arrived.</p>
+      } @else if (status() === 'missing') {
+        <p>There is no such pull request.</p>
+      } @else if (status() === 'error') {
+        <p>The project map did not load.</p>
+      } @else if (map(); as map) {
+        <details [open]="expanded()" (toggle)="setExpanded($event)">
+          <summary>
+            <h2>Project map</h2>
+          </summary>
+          @if (map.status === 'blocked') {
+            <p>{{ blocked(map) }}</p>
+            @if (map.changes.length > 0) {
+              <ul class="changes">
+                @for (change of map.changes; track change) {
+                  <li>{{ change }}</li>
+                }
+              </ul>
+            }
           } @else {
-          <div class="graph-scroll">
-            <svg
-              class="diagram"
-              [attr.viewBox]="'0 0 ' + picture.width + ' ' + picture.height"
-              [attr.width]="picture.width"
-              [attr.height]="picture.height"
-            >
-              <title>Project map</title>
-              @for (edge of picture.edges; track edge.key) {
-                <line
-                  class="edge"
-                  [class.changed]="edge.changed"
-                  [attr.x1]="edge.x1"
-                  [attr.y1]="edge.y1"
-                  [attr.x2]="edge.x2"
-                  [attr.y2]="edge.y2"
-                />
-              }
-              @for (node of picture.nodes; track node.key) {
-                <g [attr.transform]="'translate(' + node.x + ' ' + node.y + ')'">
-                  <title>{{ node.name }}</title>
-                  <rect [class.changed]="node.changed" [attr.width]="nodeWidth" [attr.height]="nodeHeight" rx="8" />
-                  <text class="node-name" [attr.x]="halfNode" y="22" text-anchor="middle">{{ node.label }}</text>
-                  @if (node.role) {
-                    <text class="node-role" [attr.x]="halfNode" y="42" text-anchor="middle">{{ node.role }}</text>
+            @let picture = drawn(map);
+            @if (map.routes.length === 0) {
+              <p>This section is missing.</p>
+            } @else {
+              <div class="graph-scroll">
+                <svg
+                  class="diagram"
+                  [attr.viewBox]="'0 0 ' + picture.width + ' ' + picture.height"
+                  [attr.width]="picture.width"
+                  [attr.height]="picture.height"
+                >
+                  <title>Project map</title>
+                  @for (edge of picture.edges; track edge.key) {
+                    <line
+                      class="edge"
+                      [class.changed]="edge.changed"
+                      [attr.x1]="edge.x1"
+                      [attr.y1]="edge.y1"
+                      [attr.x2]="edge.x2"
+                      [attr.y2]="edge.y2"
+                    />
                   }
-                  <text
-                    class="node-mark"
-                    [class.changed]="node.changed"
-                    [attr.x]="halfNode"
-                    [attr.y]="node.role ? 62 : 48"
-                    text-anchor="middle"
-                  >
-                    {{ node.mark }}
-                  </text>
-                </g>
-              }
-            </svg>
-          </div>
+                  @for (node of picture.nodes; track node.key) {
+                    <g [attr.transform]="'translate(' + node.x + ' ' + node.y + ')'">
+                      <title>{{ node.name }}</title>
+                      <rect [class.changed]="node.changed" [attr.width]="nodeWidth" [attr.height]="nodeHeight" rx="8" />
+                      <text class="node-name" [attr.x]="halfNode" y="22" text-anchor="middle">{{ node.label }}</text>
+                      @if (node.role) {
+                        <text class="node-role" [attr.x]="halfNode" y="42" text-anchor="middle">{{ node.role }}</text>
+                      }
+                      <text
+                        class="node-mark"
+                        [class.changed]="node.changed"
+                        [attr.x]="halfNode"
+                        [attr.y]="node.role ? 62 : 48"
+                        text-anchor="middle"
+                      >
+                        {{ node.mark }}
+                      </text>
+                    </g>
+                  }
+                </svg>
+              </div>
+            }
           }
-          <p class="next"><a [routerLink]="['/pulls', number(), 'units', 1]">Units</a></p>
-        </section>
+        </details>
+      } @else {
+        <p>The project map did not load.</p>
       }
-    } @else {
-      <p>The project map did not load.</p>
-    }
+    </section>
   `,
 })
 export class PullMap {
@@ -156,16 +153,25 @@ export class PullMap {
   protected readonly nodeWidth = boxWidth;
   protected readonly nodeHeight = boxHeight;
   protected readonly halfNode = boxWidth / 2;
-  protected readonly number = input.required<string>();
+  readonly number = input.required<string>();
   private requestId = 0;
   protected readonly status = signal<'loading' | 'ready' | 'missing' | 'error'>('loading');
   protected readonly map = signal<MapBody | null>(null);
+  protected readonly expanded = signal(true);
 
   constructor() {
     effect(() => {
       const number = this.number();
       void this.load(number);
     });
+  }
+
+  protected setExpanded(event: Event): void {
+    if (!(event.target instanceof HTMLDetailsElement) || event.target !== event.currentTarget) {
+      return;
+    }
+
+    this.expanded.set(event.target.open);
   }
 
   protected blocked(map: BlockedMap): string {

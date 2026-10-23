@@ -1,6 +1,5 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Component, effect, inject, input, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 
 import {positiveInteger} from './positive-integer';
@@ -35,34 +34,32 @@ type MeaningBody = BlockedMeaning | OpenMeaning;
 
 @Component({
   selector: 'app-pull-meaning',
-  imports: [RouterLink],
   template: `
-    @if (status() === 'loading') {
-      <p>The meaning has not arrived.</p>
-    } @else if (status() === 'missing') {
-      <p>There is no such pull request.</p>
-    } @else if (status() === 'error') {
-      <p>The meaning did not load.</p>
-    } @else if (meaning(); as meaning) {
-      @if (meaning.status === 'blocked') {
-        <section class="panel unit">
-          <h2>Meaning</h2>
-          <p>{{ blocked(meaning) }}</p>
-          @if (meaning.changes.length > 0) {
-            <ul class="changes">
-              @for (change of meaning.changes; track change) {
-                <li>{{ change }}</li>
-              }
-            </ul>
-          }
-        </section>
-      } @else {
-        <section class="panel meaning">
-          <details [open]="expanded()" (toggle)="setExpanded($event)">
-            <summary>
-              <h2>Meaning</h2>
+    <section class="panel fold">
+      @if (status() === 'loading') {
+        <p>The meaning has not arrived.</p>
+      } @else if (status() === 'missing') {
+        <p>There is no such pull request.</p>
+      } @else if (status() === 'error') {
+        <p>The meaning did not load.</p>
+      } @else if (meaning(); as meaning) {
+        <details [open]="expanded()" (toggle)="setExpanded($event)">
+          <summary>
+            <h2>Meaning</h2>
+            @if (meaning.status === 'open') {
               <span class="meta">{{ meaning.change }}</span>
-            </summary>
+            }
+          </summary>
+          @if (meaning.status === 'blocked') {
+            <p>{{ blocked(meaning) }}</p>
+            @if (meaning.changes.length > 0) {
+              <ul class="changes">
+                @for (change of meaning.changes; track change) {
+                  <li>{{ change }}</li>
+                }
+              </ul>
+            }
+          } @else {
             @if (meaning.skipSpecs) {
               <p>This change has no behavior contract. That is intentional.</p>
             }
@@ -103,18 +100,17 @@ type MeaningBody = BlockedMeaning | OpenMeaning;
                 <pre class="quote">{{ meaning.assumptions }}</pre>
               </details>
             }
-          </details>
-          <p class="next"><a [routerLink]="['/pulls', number(), 'map']">Project map</a></p>
-        </section>
+          }
+        </details>
+      } @else {
+        <p>The meaning did not load.</p>
       }
-    } @else {
-      <p>The meaning did not load.</p>
-    }
+    </section>
   `,
 })
 export class PullMeaning {
   private readonly http = inject(HttpClient);
-  protected readonly number = input.required<string>();
+  readonly number = input.required<string>();
   private requestId = 0;
   protected readonly status = signal<'loading' | 'ready' | 'missing' | 'error'>('loading');
   protected readonly meaning = signal<MeaningBody | null>(null);

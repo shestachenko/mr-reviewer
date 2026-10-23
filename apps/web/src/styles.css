@@ -131,11 +131,13 @@ h2 {
 }
 
 .pull summary h1 {
-  margin: 0 0 var(--space-1);
+  display: inline;
+  margin: 0;
 }
 
 .pull summary .meta {
   display: block;
+  margin-top: var(--space-1);
 }
 
 .pull > p {
@@ -153,52 +155,52 @@ h2 {
   border-radius: var(--radius);
 }
 
-.unit {
-  padding: var(--space-4);
+.fold > p {
+  padding: var(--space-3) var(--space-4);
 }
 
-.step {
-  margin: 0 0 var(--space-4);
-}
-
-.meaning summary {
+.fold summary {
   padding: var(--space-3) var(--space-4);
   cursor: pointer;
 }
 
-.meaning summary h2 {
-  margin: 0 0 var(--space-1);
+.fold summary h2 {
+  display: inline;
+  margin: 0;
 }
 
-.meaning summary .meta {
+.fold summary .meta {
   display: block;
+  margin-top: var(--space-1);
 }
 
-.meaning details[open] {
+.fold details[open] {
   padding-bottom: var(--space-2);
 }
 
-.meaning details > p,
-.meaning details > h2 {
+.fold details > p,
+.fold details > h2,
+.fold details > .graph-scroll {
   margin-right: var(--space-4);
   margin-left: var(--space-4);
 }
 
-.meaning details > h2 {
+.fold details > h2 {
   margin-top: var(--space-4);
   margin-bottom: var(--space-2);
 }
 
-.meaning details > p {
+.fold details > p {
   margin-bottom: var(--space-3);
 }
 
-.meaning .next {
+.fold details > .changes {
   margin: 0 var(--space-4) var(--space-3);
 }
 
-.meaning details > .changes {
-  margin: 0 var(--space-4) var(--space-3);
+.fold details > .graph-scroll {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .quote {
@@ -223,17 +225,8 @@ h2 {
   overflow-wrap: anywhere;
 }
 
-.current {
-  color: var(--accent);
-}
-
-.map h2 {
-  margin-top: var(--space-4);
-}
-
 .graph-scroll {
   overflow-x: auto;
-  margin: var(--space-4) 0;
 }
 
 .diagram {
@@ -288,10 +281,6 @@ h2 {
 
 .diagram .node-mark.changed {
   fill: var(--changed);
-}
-
-.map .next {
-  margin-top: var(--space-4);
 }
 
 .note {
