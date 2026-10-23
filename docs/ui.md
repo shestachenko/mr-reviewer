@@ -22,7 +22,7 @@ The word is there with the color. Color is not the only sign.
 
 ## Layout
 
-One column. Prose stays within `--read`. A list and a diff may go to `--wide`.
+One column. Prose stays within `--read`. A list and a diff may go to `--wide`, which is 90rem, the usual desktop content width.
 
 Distance comes from `--space-1` through `--space-6`.
 
