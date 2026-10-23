@@ -14,7 +14,7 @@ A page title is 1.5rem and weight 600. A section title is 1.125rem and weight 60
 
 ## Color
 
-`--accent` is the only accent: the current step, a link, and the one primary button.
+`--accent` is the only accent: the current step, a link, and the one primary button. `--changed` is only the changed part of the project map.
 
 `--accept` is only an accept. `--reject` is only a reject. A comment stays `--text`.
 
@@ -27,6 +27,8 @@ One column. Prose stays within `--read`. A list and a diff may go to `--wide`, w
 Distance comes from `--space-1` through `--space-6`.
 
 A list is rows separated by `--border`. It is not a grid of cards.
+
+The project map is a horizontal flow. Each route leads to its handler, service, usecase, helper, and adapter. A changed route or step says changed and uses `--changed`. The role under a step name is `--text` at weight 600.
 
 One primary button on a screen. Its fill is `--accent`, its label is `--surface`, and its corners are `--radius`. Any other action is `--accent` text on no fill.
 

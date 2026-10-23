@@ -32,7 +32,7 @@ Domain is the core: entities and rules. It does not import the HTTP framework, a
 
 `http/router.ts` registers every route. A file in `http/` is the handler for one route in that router. A file with no route does not belong in `http/`.
 
-The `:number` check is `pullNumber` in `domain/pull-request.ts`. The handlers for `GET /pulls/:number` and `GET /pulls/:number/meaning` use it. It stays out of `http/` because it is not a route.
+The `:number` check is `pullNumber` in `domain/pull-request.ts`. The handlers for `GET /pulls/:number`, `GET /pulls/:number/meaning`, and `GET /pulls/:number/map` use it. It stays out of `http/` because it is not a route.
 
 `GET /health` is `http/health.ts`, `usecase/health/health.ts`, `usecase/health/health.port.ts`, and `adapter/health.ts`. The health adapter reports that the process is up.
 
@@ -42,6 +42,7 @@ The `:number` check is `pullNumber` in `domain/pull-request.ts`. The handlers fo
 
 `GET /pulls/:number/meaning` is `http/pull-meaning.ts`, `usecase/pull-meaning/pull-meaning.ts`, `usecase/pull-meaning/pull-meaning.port.ts`, and `adapter/github/pull-meaning.ts`. The usecase asks the port for the changed paths and the OpenSpec files in the one change folder, including a change kept under `openspec/changes/archive/<name>/`. `domain/meaning.ts` decides whether the walkthrough opens and quotes the task, the requirement names, the scenario criteria, and any assumptions section from that change. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400. No change folder, or several, comes back as 200 and says why the walkthrough stays closed.
 
+`GET /pulls/:number/map` is `http/pull-map.ts`, `usecase/pull-map/pull-map.ts`, `usecase/pull-map/pull-map.port.ts`, and `adapter/github/pull-map.ts`. The usecase asks the port for the repository tree at the pull request head, the changed paths with their patches, and the text of the source files and delta specs. `domain/project-map.ts` builds the project map from HTTP routes in the repository source and the flow behind each route: handler, service, usecase, helper, and adapter. A route is marked changed when the diff adds its registration, or when the change's delta spec names that method and path. A step is marked changed when the diff touches its file. A missing pull comes back from the usecase as its own error. The handler turns that error into 404. A GitHub failure comes back from the usecase as its own error. The handler turns that error into 502. A number that is not a pull request number comes back as 400. No change folder, or several, comes back as 200 and says why the walkthrough stays closed.
 
 ## Shared code
 

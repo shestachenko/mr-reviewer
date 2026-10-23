@@ -6,6 +6,7 @@
   --muted: #a8a29e;
   --border: #44403c;
   --accent: #60a5fa;
+  --changed: #a78bfa;
   --accept: #4ade80;
   --reject: #f87171;
   --font: system-ui, sans-serif;
@@ -220,6 +221,77 @@ h2 {
   border-top: 1px solid var(--border);
   font-family: var(--mono);
   overflow-wrap: anywhere;
+}
+
+.current {
+  color: var(--accent);
+}
+
+.map h2 {
+  margin-top: var(--space-4);
+}
+
+.graph-scroll {
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+}
+
+.diagram {
+  display: block;
+}
+
+.diagram rect {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.diagram rect.changed {
+  stroke: var(--changed);
+  stroke-width: 2;
+}
+
+.diagram .edge {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.diagram .edge.changed {
+  stroke: var(--changed);
+}
+
+.diagram .group-label {
+  fill: var(--text);
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.diagram .node-name {
+  fill: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+.diagram .node-role {
+  fill: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.diagram .node-mark {
+  fill: var(--muted);
+  font-family: var(--font);
+  font-size: 14px;
+}
+
+.diagram .node-mark.changed {
+  fill: var(--changed);
+}
+
+.map .next {
+  margin-top: var(--space-4);
 }
 
 .note {

@@ -71,7 +71,7 @@ The database engine is not chosen. The working assumption is PostgreSQL.
 
 The GitHub review status is not chosen. The working assumption is: any reject becomes request changes, comments with no reject become a neutral comment, and a clean accept becomes approve. The pull request message is always sent and summarizes the outcome.
 
-How the two graphs are built is not chosen. The working assumption is that step 2 uses capabilities from `openspec/specs/` and modules from the repository tree, highlighting the capabilities and modules this change touches. Step 3 uses the change's capabilities, the decisions in `design.md`, and the diff files grouped into the same units. A verdict is not given from a graph.
+Step 2 reads HTTP routes from the repository source at the pull request head, then the flow behind each route: handler, service, usecase, helper, and adapter, linked by imports. A route is highlighted when the diff adds its registration, or when the change's delta spec names that method and path. A step is highlighted when the diff touches its file. Folders are not nodes. Step 3 is not chosen. The working assumption is that it uses the change's capabilities, the decisions in `design.md`, and the diff files grouped into the same units. A verdict is not given from a graph.
 
 The interface language is not chosen. The working assumption is English for the interface, with the OpenSpec and markdown text left in the language of those files.
 

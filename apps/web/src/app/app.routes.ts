@@ -1,6 +1,7 @@
 import {Routes} from '@angular/router';
 
 import {PullList} from './pull-list';
+import {PullMap} from './pull-map';
 import {PullMeaning} from './pull-meaning';
 import {PullPage} from './pull-page';
 import {PullUnit} from './pull-unit';
@@ -13,6 +14,7 @@ export const routes: Routes = [
     children: [
       {path: '', pathMatch: 'full', redirectTo: 'meaning'},
       {path: 'meaning', component: PullMeaning},
+      {path: 'map', component: PullMap},
       {path: 'units/:unit', component: PullUnit},
     ],
   },

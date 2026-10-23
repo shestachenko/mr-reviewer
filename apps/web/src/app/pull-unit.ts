@@ -8,7 +8,7 @@ import {positiveInteger} from './positive-integer';
   imports: [RouterLink],
   template: `
     <section class="panel unit">
-      <p class="step"><a [routerLink]="['/pulls', number(), 'meaning']">Meaning</a></p>
+      <p class="step"><a [routerLink]="['/pulls', number(), 'map']">Project map</a></p>
       @if (place() === null) {
         <p>This address is not a unit.</p>
       } @else {

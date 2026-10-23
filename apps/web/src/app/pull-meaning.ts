@@ -104,7 +104,7 @@ type MeaningBody = BlockedMeaning | OpenMeaning;
               </details>
             }
           </details>
-          <p class="next"><a [routerLink]="['/pulls', number(), 'units', 1]">Units</a></p>
+          <p class="next"><a [routerLink]="['/pulls', number(), 'map']">Project map</a></p>
         </section>
       }
     } @else {
