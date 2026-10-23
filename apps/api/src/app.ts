@@ -2,6 +2,7 @@ import cors from '@fastify/cors';
 import Fastify from 'fastify';
 
 import {createGitHubPull} from './adapter/github/pull.js';
+import {createGitHubPullChange} from './adapter/github/pull-change.js';
 import {createGitHubPullMap} from './adapter/github/pull-map.js';
 import {createGitHubPullMeaning} from './adapter/github/pull-meaning.js';
 import {createGitHubPullSource} from './adapter/github/pulls.js';
@@ -35,6 +36,7 @@ export async function build() {
     pull: createGitHubPull(config.github),
     map: createGitHubPullMap(config.github),
     meaning: createGitHubPullMeaning(config.github),
+    change: createGitHubPullChange(config.github),
   });
 
   return {app, config};

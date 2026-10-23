@@ -4,6 +4,7 @@ import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 
 import {positiveInteger} from './positive-integer';
+import {PullChange} from './pull-change';
 import {PullMap} from './pull-map';
 import {PullMeaning} from './pull-meaning';
 import {type PullState, pullStateLabel} from './pull-state';
@@ -38,7 +39,7 @@ const whenFormat = new Intl.DateTimeFormat('en', {
 
 @Component({
   selector: 'app-pull-page',
-  imports: [RouterLink, PullMeaning, PullMap],
+  imports: [RouterLink, PullMeaning, PullMap, PullChange],
   template: `
     <main class="wide">
       <p class="back"><a routerLink="/">Back</a></p>
@@ -67,6 +68,7 @@ const whenFormat = new Intl.DateTimeFormat('en', {
         </details>
         <app-pull-meaning [number]="number()" />
         <app-pull-map [number]="number()" />
+        <app-pull-change [number]="number()" />
       } @else {
         <p>The pull request did not load.</p>
       }

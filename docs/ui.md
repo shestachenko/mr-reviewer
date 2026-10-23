@@ -30,6 +30,8 @@ A list is rows separated by `--border`. It is not a grid of cards.
 
 The project map is a horizontal flow. Each route leads to its handler, service, usecase, helper, and adapter. A changed route or step says changed and uses `--changed`. The role under a step name is `--text` at weight 600.
 
+The change map is a horizontal flow of this change only. A capability leads to its decisions and requirements, and a requirement leads to its files. The role under a name is the kind: capability, decision, added, modified, removed, renamed, task, file, or shared.
+
 One primary button on a screen. Its fill is `--accent`, its label is `--surface`, and its corners are `--radius`. Any other action is `--accent` text on no fill.
 
 The interface copy is English. OpenSpec and markdown stay in the language of those files.
